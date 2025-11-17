@@ -30,7 +30,7 @@ const ALLOWED_MIME_TYPES = [
 
 // Storage configuration
 const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
+  destination: async (_req, _file, cb) => {
     try {
       // Create subdirectory based on date
       const dateDir = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -38,10 +38,10 @@ const storage = multer.diskStorage({
       await fs.mkdir(fullPath, { recursive: true });
       cb(null, fullPath);
     } catch (error) {
-      cb(error as Error, UPLOAD_DIR);
+      cb(error as Error, '');
     }
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     // Generate unique filename: timestamp-random-originalname
     const timestamp = Date.now();
     const random = crypto.randomBytes(8).toString('hex');
@@ -56,7 +56,7 @@ const storage = multer.diskStorage({
 });
 
 // File filter
-const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (_req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
     cb(null, true);
   } else {

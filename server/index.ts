@@ -9,7 +9,7 @@ import morgan from 'morgan';
 import compression from 'compression';
 import dotenv from 'dotenv';
 import path from 'path';
-import { errorHandler, sendSuccessResponse } from './utils/errors';
+import { globalErrorHandler, sendSuccessResponse } from './utils/errors';
 import colorTransferRoutes from './routes/v2/color-transfer';
 
 // Load environment variables
@@ -111,7 +111,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Error handler (must be last)
-app.use(errorHandler);
+app.use(globalErrorHandler);
 
 // ───────────────────────────────────────────────────────────────────────────
 // Server Start

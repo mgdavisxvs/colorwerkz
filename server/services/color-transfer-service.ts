@@ -86,7 +86,7 @@ export class ColorTransferService {
 
     try {
       // Execute PyTorch color transfer via Python
-      const scriptPath = path.join(__dirname, '..', 'server', 'pytorch_enhanced.py');
+      const scriptPath = path.join(__dirname, '..', 'pytorch_enhanced.py');
 
       const result = await pythonExecutor.execute(
         scriptPath,
@@ -143,7 +143,7 @@ export class ColorTransferService {
     const startTime = performance.now();
 
     try {
-      const scriptPath = path.join(__dirname, '..', 'server', 'opencv_baseline.py');
+      const scriptPath = path.join(__dirname, '..', 'opencv_baseline.py');
 
       const result = await pythonExecutor.execute(
         scriptPath,
@@ -202,7 +202,7 @@ export class ColorTransferService {
     const startTime = performance.now();
 
     try {
-      const scriptPath = path.join(__dirname, '..', 'server', 'i2i_transfer.py');
+      const scriptPath = path.join(__dirname, '..', 'i2i_transfer.py');
 
       const result = await pythonExecutor.execute(
         scriptPath,
@@ -338,7 +338,7 @@ export class ColorTransferService {
     targetColors: TargetColors
   ): Promise<number> {
     try {
-      const scriptPath = path.join(__dirname, '..', 'server', 'compute_delta_e.py');
+      const scriptPath = path.join(__dirname, '..', 'compute_delta_e.py');
 
       const result = await pythonExecutor.execute(
         scriptPath,

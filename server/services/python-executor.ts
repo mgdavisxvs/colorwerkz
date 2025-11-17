@@ -27,8 +27,8 @@ export class PythonExecutor {
   private serverDir: string;
 
   constructor() {
-    this.pythonPath = process.env.PYTHON_PATH || 'python3';
-    this.serverDir = path.join(__dirname, '..', 'server');
+    this.pythonPath = process.env.PYTHON_PATH || '/usr/local/bin/python3';
+    this.serverDir = path.join(__dirname, '..');
   }
 
   /**
@@ -55,8 +55,6 @@ export class PythonExecutor {
           JSON.stringify(args)
         ],
         {
-          timeout,
-          maxBuffer,
           cwd: options.cwd || this.serverDir,
           env: {
             ...process.env,
@@ -65,6 +63,12 @@ export class PythonExecutor {
           }
         }
       );
+
+      // Handle timeout manually
+      const timeoutHandle = setTimeout(() => {
+        pythonProcess.kill();
+        reject(new Error(`Python script timeout after ${timeout}ms`));
+      }, timeout);
 
       let stdout = '';
       let stderr = '';
@@ -78,7 +82,18 @@ export class PythonExecutor {
       });
 
       pythonProcess.on('close', (code) => {
+        clearTimeout(timeoutHandle);
         const duration = Date.now() - startTime;
+
+        // Check buffer size limit
+        if (stdout.length > maxBuffer || stderr.length > maxBuffer) {
+          reject(new InternalError('Python script output exceeded buffer limit', {
+            maxBuffer,
+            stdoutSize: stdout.length,
+            stderrSize: stderr.length
+          }));
+          return;
+        }
 
         if (code === 0) {
           try {
@@ -146,8 +161,6 @@ export class PythonExecutor {
         this.pythonPath,
         [scriptPath, ...args],
         {
-          timeout,
-          maxBuffer,
           cwd: options.cwd || this.serverDir,
           env: {
             ...process.env,
@@ -156,6 +169,12 @@ export class PythonExecutor {
           }
         }
       );
+
+      // Handle timeout manually
+      const timeoutHandle = setTimeout(() => {
+        pythonProcess.kill();
+        reject(new Error(`Python script timeout after ${timeout}ms`));
+      }, timeout);
 
       let stdout = '';
       let stderr = '';
@@ -169,7 +188,14 @@ export class PythonExecutor {
       });
 
       pythonProcess.on('close', (code) => {
+        clearTimeout(timeoutHandle);
         const duration = Date.now() - startTime;
+
+        // Check buffer size limit
+        if (stdout.length > maxBuffer || stderr.length > maxBuffer) {
+          reject(new Error('Python script output exceeded buffer limit'));
+          return;
+        }
 
         resolve({
           stdout,
