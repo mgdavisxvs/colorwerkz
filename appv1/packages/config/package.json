@@ -1,0 +1,7 @@
+{
+  "name": "@colorwerkz/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "eslint-preset.js"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "colorwerkz-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "tsx": "^4.15.7",
+    "typescript": "^5.6.3"
+  }
+}
