@@ -1,0 +1,25 @@
+--- a/server/synthetic_ral_dataset.py
++++ b/server/synthetic_ral_dataset.py
+@@ -222,18 +222,12 @@ class SyntheticRALDataset:
+         # Apply color transfer with lightness preservation
+         result_lab = img_lab.copy()
+
+-        # Transfer drawer color
++        # Transfer drawer color - ALL channels including lightness
+         drawer_pixels = drawer_mask > 0
+         if np.any(drawer_pixels):
+-            original_lightness = result_lab[drawer_pixels, 0]
+-            result_lab[drawer_pixels, 1:] = drawer_lab[1:]  # Only a,b
+-            result_lab[drawer_pixels, 0] = original_lightness * 0.9  # Adjust lightness
++            result_lab[drawer_pixels, :] = drawer_lab  # Full LAB transfer
+
+-        # Transfer frame color
++        # Transfer frame color - ALL channels including lightness
+         frame_pixels = frame_mask > 0
+         if np.any(frame_pixels):
+-            original_lightness = result_lab[frame_pixels, 0]
+-            result_lab[frame_pixels, 1:] = frame_lab[1:]  # Only a,b
+-            result_lab[frame_pixels, 0] = original_lightness * 0.9  # Adjust lightness
++            result_lab[frame_pixels, :] = frame_lab  # Full LAB transfer
+
+         # Convert back to BGR
